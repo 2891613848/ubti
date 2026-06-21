@@ -321,68 +321,124 @@ body{
 // ║  卡通角色 SVG 生成器                                 ║
 // ╚══════════════════════════════════════════════════════╝
 function makeCharacter(opt){
-  const bc=opt.bodyColor,bcl=opt.bodyColorLight||bc,sk=opt.skin||'#FFDBB5';
-  const hc=opt.hairColor||'#3D2B1F',ht=opt.hairType||'short';
+  const bc=opt.bodyColor,bcl=opt.bodyColorLight||bc,sk=opt.skin||'#FFE4D0';
+  const hc=opt.hairColor||'#4A3728',ht=opt.hairType||'short';
   const acc=opt.accessory||'none',expr=opt.expression||'smile';
 
-  function hairPath(){
-    const m={
-      'short':'<path d="M35 44 Q35 24 52 24 L56 22 Q58 18 64 18 Q70 18 72 22 L76 24 L93 24 Q110 24 110 44 Q110 50 106 48 Q102 44 100 46 Q96 50 90 44 L86 38 Q82 34 76 34 L70 30 Q66 26 64 26 Q62 26 58 30 L52 34 Q46 34 42 38 L38 44 Q32 50 28 46 Q24 44 20 48 Q16 50 16 44 Z" fill="'+hc+'"/>',
-      'bob':'<path d="M34 46 Q34 22 50 22 L58 18 Q62 14 68 14 Q74 14 78 18 L86 22 Q102 22 102 46 Q102 54 98 56 L96 50 Q94 44 88 46 L82 52 Q78 58 72 60 Q68 62 64 60 Q58 56 54 52 L48 46 Q42 44 38 50 L36 56 Q34 54 34 46 Z" fill="'+hc+'"/>',
-      'long':'<path d="M34 44 Q34 20 50 20 L56 16 Q62 10 70 10 Q78 10 84 16 L90 20 Q106 20 106 44 Q106 50 104 52 L100 68 Q98 78 92 82 Q86 86 78 82 L72 74 Q68 68 64 66 L70 50 Q74 42 78 44 L82 48 Q86 50 90 46 L94 44 Q98 44 98 46 Q98 50 94 50 L90 54 L88 64 Q86 74 80 78 Q74 80 68 76 L62 68 Q58 60 56 56 L50 50 Q46 44 42 44 L38 48 Q34 50 30 48 Q26 46 26 42 Q26 34 34 44 Z" fill="'+hc+'"/>',
-      'curly':'<path d="M34 44 Q32 18 50 22 Q56 8 64 14 Q72 8 78 16 Q86 10 90 18 Q96 14 100 22 Q108 24 106 36 Q110 44 104 48 Q98 52 94 46 Q90 38 86 44 Q82 50 78 44 Q74 38 70 44 Q66 50 62 44 Q58 38 54 44 Q50 50 46 46 Q40 52 34 48 Z" fill="'+hc+'"/>',
-      'spiky':'<path d="M34 46 Q36 24 50 22 L54 12 Q56 4 62 8 Q68 4 72 10 L78 6 Q82 12 86 16 L92 18 Q102 14 104 28 Q110 36 106 44 Q100 52 96 46 Q90 52 84 46 Q78 52 72 46 Q66 50 60 44 Q54 50 48 46 Q40 52 34 46 Z" fill="'+hc+'"/>',
-    };
-    return m[ht]||m['short'];
+  // 头发——后层（长发用）
+  function hairBack(){
+    if(ht==='long'){
+      return '<path d="M38 50 L34 50 Q32 88 36 108 Q40 118 50 118 L50 108 Q44 102 42 88 L42 60 Z" fill="'+hc+'"/>'
+        +'<path d="M102 50 L106 50 Q108 88 104 108 Q100 118 90 118 L90 108 Q96 102 98 88 L98 60 Z" fill="'+hc+'"/>';
+    }
+    if(ht==='twin'){
+      return '<circle cx="30" cy="62" r="13" fill="'+hc+'"/><circle cx="30" cy="64" r="5" fill="'+hc+'"/>'
+        +'<circle cx="110" cy="62" r="13" fill="'+hc+'"/><circle cx="110" cy="64" r="5" fill="'+hc+'"/>';
+    }
+    return '';
   }
+
+  // 头发——前层
+  function hairFront(){
+    const topY=18,botY=50,leftX=38,rightX=102,midX=70;
+    if(ht==='short'){
+      // 圆润锅盖头
+      return '<path d="M'+leftX+' '+botY+' Q'+leftX+' '+topY+' '+midX+' '+topY+' Q'+rightX+' '+topY+' '+rightX+' '+botY
+        +' Q'+rightX+' 54 98 56 Q94 60 90 54 Q88 50 84 52 Q78 56 74 54 Q70 50 66 54 Q62 56 58 52 Q54 50 50 54 Q46 60 42 56 Q38 54 '+leftX+' '+botY+' Z" fill="'+hc+'"/>';
+    }
+    if(ht==='bob'){
+      // 齐耳波波头
+      return '<path d="M'+leftX+' '+botY+' Q38 20 52 18 Q62 14 70 14 Q78 14 88 18 Q102 20 '+rightX+' '+botY
+        +' Q102 58 96 66 Q92 74 86 74 Q82 70 80 66 Q78 58 74 60 Q70 62 66 60 Q62 58 60 66 Q58 70 54 74 Q48 74 44 66 Q38 58 '+leftX+' '+botY+' Z" fill="'+hc+'"/>';
+    }
+    if(ht==='long'){
+      // 长发——刘海+两侧
+      return '<path d="M38 50 Q36 22 52 16 Q62 10 70 10 Q78 10 88 16 Q104 22 102 50'
+        +' Q104 56 100 56 Q96 54 94 58 Q92 64 88 58 Q84 52 80 56 Q76 60 72 56 Q68 52 64 56 Q60 60 56 56 Q52 52 48 58 Q44 64 40 58 Q36 54 38 50 Z" fill="'+hc+'"/>';
+    }
+    if(ht==='curly'){
+      // 蓬松卷毛
+      return '<path d="M40 50 Q36 22 48 14 Q56 6 62 12 Q66 4 74 8 Q80 2 86 10 Q92 6 96 14 Q106 10 104 28 Q108 38 102 50'
+        +' Q104 56 98 58 Q94 62 90 56 Q86 50 82 56 Q78 60 74 54 Q70 50 66 56 Q62 60 58 54 Q54 50 50 58 Q46 62 42 56 Q38 54 40 50 Z" fill="'+hc+'"/>';
+    }
+    if(ht==='spiky'){
+      // 刺猬头
+      return '<path d="M38 50 Q40 28 50 22 L58 8 L66 18 L70 6 L74 18 L82 8 L90 22 Q100 28 102 50'
+        +' Q100 54 96 52 Q92 56 88 52 Q84 56 80 52 Q76 56 72 52 Q68 56 64 52 Q60 56 56 52 Q52 56 48 52 Q44 54 40 52 Q36 50 38 50 Z" fill="'+hc+'"/>';
+    }
+    return '';
+  }
+
+  // 眼睛
   function eyes(){
-    if(expr==='excited') return '<circle cx="60" cy="46" r="4" fill="#1E1E2E"/><circle cx="80" cy="46" r="4" fill="#1E1E2E"/><circle cx="61" cy="44" r="1.5" fill="#fff"/><circle cx="81" cy="44" r="1.5" fill="#fff"/>';
-    if(expr==='determined') return '<circle cx="60" cy="46" r="3.5" fill="#1E1E2E"/><circle cx="80" cy="46" r="3.5" fill="#1E1E2E"/><line x1="54" y1="42" x2="63" y2="47" stroke="#1E1E2E" stroke-width="1.8" stroke-linecap="round"/><line x1="86" y1="42" x2="77" y2="47" stroke="#1E1E2E" stroke-width="1.8" stroke-linecap="round"/>';
-    if(expr==='thoughtful') return '<circle cx="58" cy="47" r="2.8" fill="#1E1E2E"/><circle cx="78" cy="47" r="2.8" fill="#1E1E2E"/><circle cx="56" cy="44" r="1" fill="#fff"/><circle cx="76" cy="44" r="1" fill="#fff"/>';
-    return '<circle cx="60" cy="46" r="3.2" fill="#1E1E2E"/><circle cx="80" cy="46" r="3.2" fill="#1E1E2E"/><circle cx="61.5" cy="44.5" r="1.3" fill="#fff"/><circle cx="81.5" cy="44.5" r="1.3" fill="#fff"/>';
+    const open='<circle cx="57" cy="46" r="3" fill="#3D2B1F"/><circle cx="83" cy="46" r="3" fill="#3D2B1F"/><circle cx="58" cy="45" r="1.2" fill="#fff"/><circle cx="84" cy="45" r="1.2" fill="#fff"/>';
+    const happy='<path d="M53 46 Q57 42 61 46" stroke="#3D2B1F" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M79 46 Q83 42 87 46" stroke="#3D2B1F" stroke-width="2" fill="none" stroke-linecap="round"/>';
+    const closed='<line x1="53" y1="46" x2="61" y2="46" stroke="#3D2B1F" stroke-width="2.5" stroke-linecap="round"/><line x1="79" y1="46" x2="87" y2="46" stroke="#3D2B1F" stroke-width="2.5" stroke-linecap="round"/>';
+    if(expr==='excited') return open;
+    if(expr==='smile') return happy;
+    if(expr==='determined') return closed;
+    if(expr==='thoughtful') return '<circle cx="56" cy="46" r="2.5" fill="#3D2B1F"/><circle cx="58" cy="47" r="2.5" fill="#3D2B1F"/><circle cx="82" cy="46" r="2.5" fill="#3D2B1F"/><circle cx="83" cy="45" r="1" fill="#fff"/><circle cx="85" cy="45" r="1" fill="#fff"/>';
+    return happy;
   }
+
+  // 腮红
+  function blush(){
+    return '<ellipse cx="46" cy="54" rx="7" ry="4" fill="#FFB6B6" opacity=".45"/><ellipse cx="94" cy="54" rx="7" ry="4" fill="#FFB6B6" opacity=".45"/>';
+  }
+
+  // 嘴巴
   function mouth(){
-    if(expr==='excited') return '<path d="M62 56 Q70 66 78 56" stroke="#1E1E2E" stroke-width="2.2" fill="none" stroke-linecap="round"/>';
-    if(expr==='determined') return '<path d="M63 56 L77 56" stroke="#1E1E2E" stroke-width="2" stroke-linecap="round"/>';
-    if(expr==='thoughtful') return '<path d="M65 58 Q70 54 75 58" stroke="#1E1E2E" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
-    return '<path d="M63 55 Q70 61 77 55" stroke="#1E1E2E" stroke-width="2" fill="none" stroke-linecap="round"/>';
+    if(expr==='excited') return '<ellipse cx="70" cy="60" rx="5" ry="6" fill="#3D2B1F"/>';
+    if(expr==='smile') return '<path d="M66 58 Q70 63 74 58" stroke="#3D2B1F" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
+    if(expr==='determined') return '<path d="M66 60 L74 60" stroke="#3D2B1F" stroke-width="2" stroke-linecap="round"/>';
+    if(expr==='thoughtful') return '<circle cx="70" cy="60" r="2.5" fill="#3D2B1F"/>';
+    return '<path d="M66 58 Q70 63 74 58" stroke="#3D2B1F" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
   }
+
+  // 小配件
   function accSVG(){
     const a={
-      'glasses':'<circle cx="55" cy="45" r="11" fill="none" stroke="#333" stroke-width="2.5"/><circle cx="85" cy="45" r="11" fill="none" stroke="#333" stroke-width="2.5"/><line x1="66" y1="45" x2="74" y2="45" stroke="#333" stroke-width="2"/>',
-      'goggles':'<circle cx="55" cy="44" r="13" fill="rgba(255,255,255,.4)" stroke="#555" stroke-width="2.5"/><circle cx="85" cy="44" r="13" fill="rgba(255,255,255,.4)" stroke="#555" stroke-width="2.5"/><line x1="68" y1="44" x2="72" y2="44" stroke="#555" stroke-width="2.5"/>',
-      'star':'<polygon points="96,28 99,34 106,35 101,40 102,47 96,44 90,47 91,40 86,35 93,34" fill="#FFE66D" stroke="#F0C800" stroke-width="1"/>',
-      'heart':'<path d="M90 82 Q90 74 96 74 Q102 74 102 80 Q102 88 96 94 Q90 88 90 82 Z" fill="#FF6B6B"/>',
-      'book':'<rect x="26" y="70" width="28" height="20" rx="2" fill="#fff" stroke="#999" stroke-width="1.5"/><line x1="40" y1="70" x2="40" y2="90" stroke="#999" stroke-width="1"/><line x1="30" y1="76" x2="37" y2="76" stroke="#ccc" stroke-width="1"/><line x1="30" y1="81" x2="37" y2="81" stroke="#ccc" stroke-width="1"/>',
-      'beaker':'<path d="M26 82 L26 68 Q32 60 32 50 L32 34 L30 34 L30 28 L50 28 L50 34 L48 34 L48 50 Q48 60 54 68 L54 82 Z" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/><rect x="27" y="78" width="26" height="4" rx="1" fill="#fff" opacity=".5"/>',
-      'magnifier':'<circle cx="96" cy="78" r="10" fill="none" stroke="#fff" stroke-width="2.5" opacity=".8"/><line x1="88" y1="86" x2="80" y2="94" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/>',
-      'leaf':'<path d="M94 74 Q102 64 98 56 Q90 60 88 68 Q86 76 94 74 Z" fill="#4ADE80"/><line x1="94" y1="74" x2="98" y2="56" stroke="#22C55E" stroke-width="1"/>',
-      'chess':'<path d="M90 90 Q90 76 94 68 Q96 62 100 56 Q104 50 98 48 Q92 46 92 52 Q92 56 96 58 Q94 62 90 68 Q86 76 86 90 Z" fill="#F8F9FA" stroke="#ccc" stroke-width="1.5"/>',
-      'gear':'<circle cx="28" cy="62" r="8" fill="none" stroke="#fff" stroke-width="2.5" opacity=".7"/><circle cx="28" cy="62" r="2.5" fill="#fff" opacity=".7"/><line x1="28" y1="52" x2="28" y2="55" stroke="#fff" stroke-width="2" opacity=".7"/><line x1="28" y1="69" x2="28" y2="72" stroke="#fff" stroke-width="2" opacity=".7"/><line x1="18" y1="62" x2="21" y2="62" stroke="#fff" stroke-width="2" opacity=".7"/><line x1="35" y1="62" x2="38" y2="62" stroke="#fff" stroke-width="2" opacity=".7"/>',
-      'rocket':'<path d="M100 70 Q104 56 102 44 Q100 36 96 40 Q94 48 94 56 Q94 64 96 70 Z" fill="#fff" opacity=".8"/><path d="M96 40 L94 28 L100 20 L106 28 L104 40" fill="#FF6B6B" opacity=".8"/><circle cx="100" cy="24" r="2" fill="#FFE66D"/>',
-      'globe':'<circle cx="28" cy="62" r="11" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/><ellipse cx="28" cy="62" rx="5" ry="11" fill="none" stroke="#fff" stroke-width="1" opacity=".5"/><line x1="18" y1="62" x2="38" y2="62" stroke="#fff" stroke-width="1" opacity=".5"/>',
-      'stethoscope':'<path d="M26 76 L26 64 Q26 54 34 54 Q42 54 42 60 Q42 66 34 64" fill="none" stroke="#fff" stroke-width="2.5" opacity=".7" stroke-linecap="round"/><circle cx="34" cy="60" r="4" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>',
-      'palette':'<ellipse cx="30" cy="70" rx="14" ry="10" fill="#fff" opacity=".7" transform="rotate(-15 30 70)"/><circle cx="24" cy="66" r="2.5" fill="#FF6B6B"/><circle cx="32" cy="64" r="2.5" fill="#4ECDC4"/><circle cx="28" cy="73" r="2" fill="#FFE66D"/><circle cx="36" cy="71" r="2.5" fill="#A78BFA"/>',
-      'megaphone':'<path d="M86 84 L74 76 L56 76 L56 92 L74 92 L86 84 Z" fill="#fff" opacity=".7"/><path d="M86 84 L96 76 L96 92 Z" fill="#fff" opacity=".5"/>',
-      'wrench':'<rect x="20" y="78" width="28" height="5" rx="2" fill="#fff" opacity=".7" transform="rotate(-30 34 80)"/><circle cx="20" cy="81" r="6" fill="none" stroke="#fff" stroke-width="2.5" opacity=".7"/>',
+      'glasses':'<circle cx="55" cy="46" r="9" fill="none" stroke="#4A4A4A" stroke-width="2.2"/><circle cx="85" cy="46" r="9" fill="none" stroke="#4A4A4A" stroke-width="2.2"/><line x1="64" y1="46" x2="76" y2="46" stroke="#4A4A4A" stroke-width="2"/>',
+      'goggles':'<circle cx="53" cy="40" r="10" fill="rgba(255,255,255,.5)" stroke="#5A5A5A" stroke-width="2"/><circle cx="87" cy="40" r="10" fill="rgba(255,255,255,.5)" stroke="#5A5A5A" stroke-width="2"/><line x1="63" y1="40" x2="77" y2="40" stroke="#5A5A5A" stroke-width="2.5"/>',
+      'star':'<polygon points="102,22 104,28 110,29 106,34 107,40 102,37 97,40 98,34 94,29 100,28" fill="#FFD93D" stroke="#E8B800" stroke-width=".8"/>',
+      'heart':'<path d="M104 88 Q104 82 108 82 Q112 82 112 86 Q112 92 108 98 Q104 92 104 88 Z" fill="#FF7675"/>',
+      'book':'<rect x="24" y="74" width="22" height="16" rx="2" fill="#FFF" stroke="#BBB" stroke-width="1.2"/><line x1="35" y1="74" x2="35" y2="90" stroke="#BBB" stroke-width=".8"/><line x1="27" y1="79" x2="33" y2="79" stroke="#DDD" stroke-width=".8"/><line x1="27" y1="83" x2="33" y2="83" stroke="#DDD" stroke-width=".8"/>',
+      'beaker':'<path d="M22 88 L22 72 Q26 64 28 56 L28 36 L26 36 L26 30 L42 30 L42 36 L40 36 L40 56 Q42 64 46 72 L46 88 Z" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/><rect x="24" y="84" width="20" height="3" rx="1" fill="#fff" opacity=".5"/>',
+      'magnifier':'<circle cx="100" cy="80" r="9" fill="none" stroke="#fff" stroke-width="2.2" opacity=".8"/><line x1="93" y1="87" x2="85" y2="95" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>',
+      'leaf':'<path d="M98 74 Q106 66 102 58 Q94 60 92 68 Q90 76 98 74 Z" fill="#6BCB77"/><line x1="98" y1="74" x2="102" y2="58" stroke="#4DA85B" stroke-width=".8"/>',
+      'chess':'<path d="M98 88 Q98 74 102 66 Q104 58 100 54 Q96 50 96 54 Q96 58 100 60 Q98 64 96 68 Q94 74 94 88 Z" fill="#F5F5F5" stroke="#CCC" stroke-width="1.2"/>',
+      'gear':'<circle cx="28" cy="60" r="7" fill="none" stroke="#fff" stroke-width="2.2" opacity=".7"/><circle cx="28" cy="60" r="2.5" fill="#fff" opacity=".7"/>',
+      'rocket':'<path d="M102 70 L106 56 L102 44 Q98 36 96 42 Q94 50 94 56 Q94 64 96 70 Z" fill="#fff" opacity=".8"/><path d="M96 42 L94 30 L100 22 L106 30 L104 42" fill="#FF7675" opacity=".8"/>',
+      'globe':'<circle cx="28" cy="62" r="10" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/><ellipse cx="28" cy="62" rx="4" ry="10" fill="none" stroke="#fff" stroke-width=".8" opacity=".5"/><line x1="19" y1="62" x2="37" y2="62" stroke="#fff" stroke-width=".8" opacity=".5"/>',
+      'stethoscope':'<path d="M22 82 L22 68 Q22 58 30 58 Q38 58 38 64 Q38 70 30 68" fill="none" stroke="#fff" stroke-width="2.2" opacity=".7" stroke-linecap="round"/><circle cx="30" cy="63" r="4" fill="none" stroke="#fff" stroke-width="1.8" opacity=".7"/>',
+      'palette':'<ellipse cx="28" cy="70" rx="12" ry="8" fill="#fff" opacity=".7" transform="rotate(-12 28 70)"/><circle cx="22" cy="67" r="2" fill="#FF7675"/><circle cx="30" cy="65" r="2" fill="#74B9FF"/><circle cx="26" cy="73" r="1.8" fill="#FFEAA7"/>',
+      'megaphone':'<path d="M88 88 L78 80 L58 80 L58 96 L78 96 L88 88 Z" fill="#fff" opacity=".7"/><path d="M88 88 L96 82 L96 94 Z" fill="#fff" opacity=".5"/>',
+      'wrench':'<rect x="20" y="80" width="24" height="4.5" rx="2" fill="#fff" opacity=".7" transform="rotate(-35 32 82)"/><circle cx="20" cy="83" r="5.5" fill="none" stroke="#fff" stroke-width="2.2" opacity=".7"/>',
       'none':'',
     };
     return a[acc]||'';
   }
-  return `<svg viewBox="0 0 140 140" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="70" cy="70" r="64" fill="${bcl}" opacity=".12"/>
-    <circle cx="70" cy="70" r="64" fill="none" stroke="${bc}" stroke-width="2.5" opacity=".4"/>
-    <path d="M30 102 Q30 82 46 74 L94 74 Q110 82 110 102 L110 126 L30 126 Z" fill="${bc}" opacity=".85"/>
-    <circle cx="70" cy="50" r="28" fill="${sk}"/>
-    ${hairPath()}
-    ${eyes()}
-    <ellipse cx="54" cy="54" rx="5" ry="2.8" fill="#FFB6C1" opacity=".45"/>
-    <ellipse cx="86" cy="54" rx="5" ry="2.8" fill="#FFB6C1" opacity=".45"/>
-    ${mouth()}
-    ${accSVG()}
-    ${opt.sparkle?'<circle cx="100" cy="30" r="2" fill="#FFE66D" opacity=".8"/><circle cx="40" cy="28" r="1.5" fill="#FFE66D" opacity=".7"/><circle cx="108" cy="50" r="1.8" fill="#FFE66D" opacity=".6"/>':''}
-  </svg>`;
+
+  // 组装 SVG
+  const bodyPath='<path d="M44 80 Q40 78 40 82 L40 126 Q40 132 46 132 L94 132 Q100 132 100 126 L100 82 Q100 78 96 80 Q88 86 70 86 Q52 86 44 80 Z" fill="'+bc+'"/>';
+  const collar='<path d="M58 80 Q70 90 82 80" stroke="'+bcl+'" stroke-width="2.5" fill="none" opacity=".5" stroke-linecap="round"/>';
+  const head='<circle cx="70" cy="50" r="33" fill="'+sk+'"/>';
+
+  return '<svg viewBox="0 0 140 140" width="150" height="150" xmlns="http://www.w3.org/2000/svg">'
+    +'<circle cx="70" cy="70" r="62" fill="'+bcl+'" opacity=".07"/>'
+    +hairBack()
+    +bodyPath
+    +collar
+    +head
+    +hairFront()
+    +eyes()
+    +blush()
+    +mouth()
+    +accSVG()
+    +(opt.sparkle?'<circle cx="104" cy="24" r="2" fill="#FFEAA7" opacity=".8"/><circle cx="36" cy="22" r="1.5" fill="#FFEAA7" opacity=".7"/><circle cx="100" cy="36" r="1.5" fill="#FFEAA7" opacity=".6"/>':'')
+    +'</svg>';
 }
+
 
 // ╔══════════════════════════════════════════════════════╗
 // ║  16 种类型 (角色 + 画像 + 择校要素 + 总结)           ║
@@ -425,7 +481,7 @@ const TYPE_CONFIG = {
   },
   "R-W-A-F":{
     label:"自由跨界者", tagline:"知识没有边界，你也不需要。",
-    character:{bodyColor:"#F43F5E",bodyColorLight:"#FB7185",skin:"#FFD9C5",hairColor:"#FF6B9D",hairType:"long",accessory:"star",expression:"excited",sparkle:true},
+    character:{bodyColor:"#F43F5E",bodyColorLight:"#FB7185",skin:"#FFD9C5",hairColor:"#E85D75",hairType:"twin",accessory:"star",expression:"excited",sparkle:true},
     profile:"你是最典型的「无法被一个专业定义」的人。你的智识兴趣广泛且不断自我扩展——你对「学科边界」这个概念本身就不太尊重，因为你认为所有真正重要的问题都出现在边界上。你需要极大的课程自由度：跨院系选课、自主设计专业、独立研究项目——这些不是「加分项」，而是你的「基本需求」。",
     factors:["跨院系选课的自由度与便利性","自主设计专业/个性化培养方案","跨学科研究中心与项目制学习","允许试错和转换方向的弹性学制"],
     summary:"你不需要一个「专业」——你需要一个让你自由组合知识的平台。去找那些真正允许跨院系选课、甚至有「自主设计专业」制度的大学，那里才是你的主场。"
@@ -467,7 +523,7 @@ const TYPE_CONFIG = {
   },
   "V-D-C-F":{
     label:"创业实践者", tagline:"不要告诉我不可能——我要试试看。",
-    character:{bodyColor:"#EF4444",bodyColorLight:"#F87171",skin:"#FFDBAC",hairColor:"#6B2020",hairType:"spiky",accessory:"rocket",expression:"excited"},
+    character:{bodyColor:"#EF4444",bodyColorLight:"#F87171",skin:"#FFDBAC",hairColor:"#6B2020",hairType:"curly",accessory:"rocket",expression:"excited"},
     profile:"你是一个实干家——最大的驱动力是「把想法变成产品/项目/组织」。学术理论对你来说只有工具价值，你更关心「这东西能不能跑起来」。你适合创业氛围浓厚、产教融合紧密的大学——那里有孵化器、有创业基金、有灵活的学制允许你 gap 一年去试项目。传统「上课-考试-毕业」的路径对你来说太慢了。",
     factors:["创业孵化器与种子基金的可及性","弹性学制与休学创业的政策支持","产教融合与企业导师资源","创业类竞赛与路演活动的活跃度"],
     summary:"你的大学应该是一个 launchpad，不是一条流水线。去找那些有创业基因、鼓励学生「先做起来」的大学——那里会给你跑道，而不仅仅是课表。"
