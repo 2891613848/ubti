@@ -1,0 +1,377 @@
+/* ═══════════════════════════════════════════════════════
+   首页 v2 — 粒子 Hero + 打字机 + UBTI 测试
+   ═══════════════════════════════════════════════════════ */
+
+// ── SVG 卡通角色（保持原版）──
+function makeCharacter(opt){
+  const bc=opt.bodyColor,bcl=opt.bodyColorLight||bc,sk=opt.skin||'#FFE4D0';
+  const hc=opt.hairColor||'#4A3728',ht=opt.hairType||'short';
+  const acc=opt.accessory||'none',expr=opt.expression||'smile';
+
+  function hairBack(){
+    if(ht==='long') return '<ellipse cx="32" cy="82" rx="12" ry="28" fill="'+hc+'"/><ellipse cx="108" cy="82" rx="12" ry="28" fill="'+hc+'"/>';
+    if(ht==='twin') return '<circle cx="28" cy="62" r="14" fill="'+hc+'"/><circle cx="112" cy="62" r="14" fill="'+hc+'"/>';
+    return '';
+  }
+
+  function hairFront(){
+    const L=36,R=104,T=12,B=46;
+    if(ht==='short') return '<path d="M'+L+' '+B+' Q34 14 70 12 Q106 14 '+R+' '+B+' Q'+R+' 54 98 54 Q94 60 90 52 Q86 44 82 52 Q78 58 74 48 Q70 42 66 48 Q62 58 58 52 Q54 44 50 52 Q46 60 42 54 Q'+L+' 54 '+L+' '+B+' Z" fill="'+hc+'"/>';
+    if(ht==='bob') return '<path d="M'+L+' '+B+' Q34 16 50 12 Q64 6 70 6 Q76 6 90 12 Q106 16 '+R+' '+B+' Q'+R+' 64 96 72 Q90 80 84 76 Q80 70 78 64 Q74 54 70 56 Q66 54 62 64 Q60 70 56 76 Q50 80 44 72 Q'+L+' 64 '+L+' '+B+' Z" fill="'+hc+'"/>';
+    if(ht==='long') return '<path d="M'+L+' '+B+' Q34 18 52 10 Q64 4 70 4 Q76 4 88 10 Q106 18 '+R+' '+B+' Q'+R+' 58 100 56 Q96 54 94 60 Q90 68 86 58 Q82 48 78 56 Q74 64 70 54 Q66 44 62 56 Q58 68 54 58 Q50 48 46 60 Q42 68 40 56 Q'+L+' 58 '+L+' '+B+' Z" fill="'+hc+'"/>';
+    if(ht==='curly') return '<path d="M38 46 Q34 18 50 10 Q56 4 62 10 Q66 2 72 8 Q78 2 84 10 Q90 4 96 12 Q106 8 104 28 Q110 40 102 46 Q104 54 98 56 Q94 62 90 54 Q86 46 82 56 Q78 62 74 52 Q70 44 66 54 Q62 62 58 54 Q54 46 50 56 Q46 62 42 54 Q38 48 38 46 Z" fill="'+hc+'"/>';
+    if(ht==='spiky') return '<path d="M38 46 Q36 28 46 20 L54 6 L62 18 L70 2 L78 18 L86 6 L94 20 Q104 28 102 46 Q100 52 96 52 Q92 56 88 52 Q84 56 80 50 Q76 54 72 48 Q68 52 64 50 Q60 56 56 52 Q52 54 48 50 Q44 54 40 50 Q36 48 38 46 Z" fill="'+hc+'"/>';
+    return '';
+  }
+
+  function eyebrows(){
+    if(expr==='excited') return '<path d="M52 36 Q55 33 58 36" stroke="#3D2B1F" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M82 36 Q85 33 88 36" stroke="#3D2B1F" stroke-width="1.5" fill="none" stroke-linecap="round"/>';
+    if(expr==='smile') return '<path d="M53 37 Q56 35 59 37" stroke="#3D2B1F" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M81 37 Q84 35 87 37" stroke="#3D2B1F" stroke-width="1.2" fill="none" stroke-linecap="round"/>';
+    if(expr==='determined') return '<line x1="52" y1="36" x2="59" y2="38" stroke="#3D2B1F" stroke-width="1.5" stroke-linecap="round"/><line x1="88" y1="36" x2="81" y2="38" stroke="#3D2B1F" stroke-width="1.5" stroke-linecap="round"/>';
+    if(expr==='thoughtful') return '<path d="M53 37 Q55 38 58 37" stroke="#3D2B1F" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M80 36 Q82 34 87 37" stroke="#3D2B1F" stroke-width="1.2" fill="none" stroke-linecap="round"/>';
+    return '';
+  }
+
+  function eyes(){
+    const open='<circle cx="57" cy="44" r="3.2" fill="#3D2B1F"/><circle cx="83" cy="44" r="3.2" fill="#3D2B1F"/><circle cx="58" cy="43" r="1.3" fill="#fff"/><circle cx="84" cy="43" r="1.3" fill="#fff"/>';
+    const happy='<path d="M52 44 Q56 40 61 44" stroke="#3D2B1F" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M79 44 Q83 40 88 44" stroke="#3D2B1F" stroke-width="2.2" fill="none" stroke-linecap="round"/>';
+    const closed='<line x1="51" y1="44" x2="60" y2="44" stroke="#3D2B1F" stroke-width="2.5" stroke-linecap="round"/><line x1="80" y1="44" x2="89" y2="44" stroke="#3D2B1F" stroke-width="2.5" stroke-linecap="round"/>';
+    if(expr==='excited') return open;
+    if(expr==='smile') return happy;
+    if(expr==='determined') return closed;
+    if(expr==='thoughtful') return '<circle cx="55" cy="44" r="2.5" fill="#3D2B1F"/><circle cx="57" cy="45" r="2.5" fill="#3D2B1F"/><circle cx="82" cy="44" r="2.5" fill="#3D2B1F"/><circle cx="83" cy="43" r="1" fill="#fff"/><circle cx="85" cy="43" r="1" fill="#fff"/>';
+    return happy;
+  }
+
+  function blush(){return '<ellipse cx="44" cy="53" rx="8" ry="5" fill="#FFB8B8" opacity=".5"/><ellipse cx="96" cy="53" rx="8" ry="5" fill="#FFB8B8" opacity=".5"/>';}
+
+  function mouth(){
+    if(expr==='excited') return '<ellipse cx="70" cy="60" rx="4.5" ry="5.5" fill="#3D2B1F"/><path d="M66 58 Q70 54 74 58" stroke="#FFE4D0" stroke-width="1" fill="none" stroke-linecap="round"/>';
+    if(expr==='smile') return '<path d="M65 58 Q70 64 75 58" stroke="#3D2B1F" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
+    if(expr==='determined') return '<path d="M66 61 L74 61" stroke="#3D2B1F" stroke-width="2" stroke-linecap="round"/>';
+    if(expr==='thoughtful') return '<circle cx="68" cy="60" r="2.5" fill="#3D2B1F"/>';
+    return '<path d="M65 58 Q70 64 75 58" stroke="#3D2B1F" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
+  }
+
+  function accSVG(acc){
+    const a={
+      'glasses':'<circle cx="53" cy="44" r="10" fill="none" stroke="#555" stroke-width="2.2"/><circle cx="87" cy="44" r="10" fill="none" stroke="#555" stroke-width="2.2"/><line x1="63" y1="44" x2="77" y2="44" stroke="#555" stroke-width="2"/>',
+      'goggles':'<circle cx="51" cy="36" r="11" fill="rgba(255,255,255,.55)" stroke="#666" stroke-width="2"/><circle cx="89" cy="36" r="11" fill="rgba(255,255,255,.55)" stroke="#666" stroke-width="2"/><rect x="62" y="34" width="16" height="4" rx="1" fill="#666"/>',
+      'star':'<polygon points="104,20 106,27 113,28 108,33 110,40 104,37 98,40 100,33 95,28 102,27" fill="#FFD93D" stroke="#E8B800" stroke-width=".7"/>',
+      'heart':'<path d="M104 92 Q104 85 109 85 Q114 85 114 90 Q114 96 109 103 Q104 96 104 92 Z" fill="#FF7675"/>',
+      'book':'<rect x="22" y="76" width="24" height="17" rx="2.5" fill="#FFF" stroke="#C0C0C0" stroke-width="1.2"/><line x1="34" y1="76" x2="34" y2="93" stroke="#C0C0C0" stroke-width=".8"/><line x1="25" y1="81" x2="32" y2="81" stroke="#DDD" stroke-width=".7"/><line x1="25" y1="85" x2="32" y2="85" stroke="#DDD" stroke-width=".7"/>',
+      'beaker':'<path d="M22 88 L22 74 Q26 66 28 58 L28 38 L26 38 L26 32 L42 32 L42 38 L40 38 L40 58 Q42 66 46 74 L46 88 Z" fill="none" stroke="#fff" stroke-width="2" opacity=".85"/><rect x="24" y="84" width="20" height="3" rx="1" fill="#fff" opacity=".5"/>',
+      'magnifier':'<circle cx="100" cy="82" r="9" fill="none" stroke="#fff" stroke-width="2.2" opacity=".85"/><line x1="93" y1="89" x2="84" y2="98" stroke="#fff" stroke-width="2.8" stroke-linecap="round" opacity=".85"/>',
+      'leaf':'<path d="M100 76 Q108 66 103 56 Q94 58 92 66 Q90 76 100 76 Z" fill="#6BCB77"/><line x1="100" y1="76" x2="103" y2="56" stroke="#4DA85B" stroke-width=".7"/>',
+      'chess':'<path d="M100 90 Q100 76 104 68 Q106 58 102 54 Q98 50 98 54 Q98 58 102 60 Q100 66 98 70 Q96 78 96 90 Z" fill="#F8F8F8" stroke="#D0D0D0" stroke-width="1.2"/>',
+      'gear':'<circle cx="26" cy="62" r="7.5" fill="none" stroke="#fff" stroke-width="2.2" opacity=".75"/><circle cx="26" cy="62" r="2.5" fill="#fff" opacity=".75"/>',
+      'rocket':'<path d="M102 72 L106 56 L102 42 Q98 34 96 42 Q94 50 94 56 Q94 64 96 72 Z" fill="#fff" opacity=".85"/><path d="M96 42 L94 28 L100 20 L106 28 L104 42" fill="#FF7675" opacity=".85"/>',
+      'globe':'<circle cx="26" cy="64" r="10" fill="none" stroke="#fff" stroke-width="2" opacity=".75"/><ellipse cx="26" cy="64" rx="4.5" ry="10" fill="none" stroke="#fff" stroke-width=".8" opacity=".5"/><line x1="17" y1="64" x2="35" y2="64" stroke="#fff" stroke-width=".8" opacity=".5"/>',
+      'stethoscope':'<path d="M22 84 L22 68 Q22 58 30 58 Q38 58 38 64 Q38 72 30 68" fill="none" stroke="#fff" stroke-width="2.2" opacity=".75" stroke-linecap="round"/><circle cx="30" cy="63" r="4" fill="none" stroke="#fff" stroke-width="1.8" opacity=".75"/>',
+      'palette':'<ellipse cx="26" cy="72" rx="13" ry="8.5" fill="#fff" opacity=".75" transform="rotate(-15 26 72)"/><circle cx="20" cy="68" r="2.2" fill="#FF7675"/><circle cx="28" cy="66" r="2.2" fill="#74B9FF"/><circle cx="24" cy="75" r="2" fill="#FFEAA7"/>',
+      'megaphone':'<path d="M90 90 L78 82 L56 82 L56 98 L78 98 L90 90 Z" fill="#fff" opacity=".75"/><path d="M90 90 L99 82 L99 98 Z" fill="#fff" opacity=".55"/>',
+      'wrench':'<rect x="18" y="82" width="26" height="5" rx="2" fill="#fff" opacity=".75" transform="rotate(-30 31 84)"/><circle cx="18" cy="85" r="6" fill="none" stroke="#fff" stroke-width="2.2" opacity=".75"/>',
+      'none':'',
+    };
+    return a[acc]||'';
+  }
+
+  const arms='<ellipse cx="30" cy="102" rx="8" ry="17" fill="'+sk+'" transform="rotate(12 30 102)"/><ellipse cx="110" cy="102" rx="8" ry="17" fill="'+sk+'" transform="rotate(-12 110 102)"/>';
+  const body='<path d="M44 79 Q40 77 40 81 L40 126 Q40 132 46 132 L94 132 Q100 132 100 126 L100 81 Q100 77 96 79 Q88 85 70 85 Q52 85 44 79 Z" fill="'+bc+'"/>';
+  const collar='<path d="M58 79 Q70 88 82 79" stroke="'+bcl+'" stroke-width="2.5" fill="none" opacity=".4" stroke-linecap="round"/>';
+  const head='<circle cx="70" cy="46" r="35" fill="'+sk+'"/>';
+
+  return '<svg viewBox="0 0 140 140" width="150" height="150" xmlns="http://www.w3.org/2000/svg"><circle cx="70" cy="70" r="60" fill="'+bcl+'" opacity=".08"/>'+hairBack()+arms+body+collar+head+hairFront()+eyebrows()+eyes()+blush()+mouth()+accSVG(acc)+(opt.sparkle?'<circle cx="105" cy="22" r="2.2" fill="#FFEAA7" opacity=".85"/><circle cx="34" cy="20" r="1.5" fill="#FFEAA7" opacity=".7"/><circle cx="100" cy="36" r="1.8" fill="#FFEAA7" opacity=".65"/>':'')+'</svg>';
+}
+
+// ── 题库 & 类型 & 维度 ──
+const QUESTIONS = [
+  {dim:"U",text:"你更享受哪种学习过程？",optA:"为了理解一个理论，可以花很长时间反复琢磨",optB:"学到能立刻用起来的技能，最有成就感"},
+  {dim:"U",text:"你对大学四年的核心期待是什么？",optA:"深入理解某个学科的本质和思维方式",optB:"获得有竞争力的职业能力和行业认知"},
+  {dim:"U",text:"关于读研深造（继续攻读硕士/博士研究生），你的态度是？",optA:"如果有感兴趣的学术方向，我希望继续深造",optB:"除非从事的职业明确要求，否则我更想本科毕业后直接工作"},
+  {dim:"U",text:"一门课程同时涉及「为什么」和「怎么做」，你更看重哪一部分？",optA:"「为什么」——理解背后的原理和逻辑让我感到充实",optB:"「怎么做」——学到可操作的方法和技能让我觉得有收获"},
+  {dim:"U",text:"你理想中的大学老师更接近哪种描述？",optA:"学术造诣深厚、在学科领域内有原创理论贡献的学者",optB:"行业经验丰富、能把业界真实案例带入课堂的实践者"},
+  {dim:"U",text:"如果你做毕业论文/设计（大学最后一年的综合性研究或实践课题），你倾向于？",optA:"选择一个偏理论探究的课题",optB:"选择一个有直接应用价值的课题"},
+  {dim:"U",text:"你对顶尖学者（在自己领域取得重要学术成就的人）的态度是？",optA:"非常敬佩，希望自己未来也能在学术上做出贡献",optB:"尊重他们的成就，但我更关心这些研究成果的实际用途"},
+  {dim:"U",text:"选课时，你更容易被哪类课程吸引？",optA:"深入的理论专题课，例如「康德哲学导论」「量子力学原理」",optB:"实用的技能课，例如「Python 数据分析」「商务英语写作」"},
+  {dim:"U",text:"以下哪种描述更符合你对大学四年「成功」的定义？",optA:"建立了一套深刻的思维框架，形成了自己看世界的方式",optB:"找到了清晰的职业方向，并且具备了从事该职业的核心能力"},
+  {dim:"U",text:"对于课外竞赛和项目，你更愿意参加？",optA:"学术类竞赛，如数学建模竞赛、「挑战杯」学术科技作品竞赛",optB:"实践类竞赛，如创业计划大赛、商业案例分析赛"},
+  {dim:"U",text:"以下哪种对「终身学习」的理解更接近你的想法？",optA:"围绕一个知识体系，随着时间推移不断加深理解",optB:"跟随职业发展和时代变化，持续更新自己的技能组合"},
+  {dim:"U",text:"评价一所大学好不好，你最先关注的指标是什么？",optA:"学术声誉、学科评估排名、教授学术水平",optB:"毕业生就业率、平均起薪、业界对毕业生的认可度"},
+  {dim:"B",text:"关于知识的广度和深度，你的偏好是？",optA:"宁可在一个领域知道得很深，深度让我有安全感",optB:"宁可知道很多领域的入门知识，广度给我更多可能性"},
+  {dim:"B",text:"如果由你来规划大学四年的课程？",optA:"围绕一个核心专业，从基础到前沿逐层深入",optB:"跨院系广泛选课，不想被任何一个专业完全限定"},
+  {dim:"B",text:"你对「跨学科」（同时涉及两个或以上学科领域的学习和研究）的态度是？",optA:"先把一个领域做深做透最重要，跨学科容易分散精力",optB:"最有价值的创新往往出现在学科交叉处，跨学科是必要的"},
+  {dim:"B",text:"你更认同以下哪种人？",optA:"在一个细分领域持续深耕、最终做到顶尖水平的人",optB:"能够在不同领域之间建立连接、看到全局图景的人"},
+  {dim:"B",text:"阅读时你的习惯更接近？",optA:"找到一本好书反复精读，直到把核心思想完全吸收",optB:"广泛浏览不同主题的书，寻找不同领域之间的关联"},
+  {dim:"B",text:"如果有人问「你擅长什么领域」，你的反应更接近？",optA:"我能给出明确、聚焦的回答",optB:"我很难用一个特定的领域来概括自己"},
+  {dim:"B",text:"对于双学位或辅修（同时修读两个不同领域的专业），你的态度是？",optA:"专心把一个专业学好就足够了",optB:"很感兴趣，能接触两个专业比只学一个更有吸引力"},
+  {dim:"B",text:"做团队项目时，你更愿意承担以下哪种角色？",optA:"在项目的核心环节深入钻研，把最关键的部分做到最好",optB:"负责串联项目的不同板块，确保各部分协调运转"},
+  {dim:"B",text:"你如何看待「T型人才」（在一个领域有深度，同时具备多个领域的广泛知识）？",optA:"「一竖」的深度是真正的竞争力，「一横」只是锦上添花",optB:"「一横」的广度决定了差异化的竞争力，「一竖」是基本功"},
+  {dim:"B",text:"接触到一个陌生的知识领域时，你的第一反应是？",optA:"尝试用自己熟悉领域的深度理解去类比和消化它",optB:"感到兴奋，觉得可以借此机会连接到自己已有的知识网络"},
+  {dim:"B",text:"浏览大学本科专业目录时，你的感受更接近？",optA:"很快就能锁定几个适合自己的专业方向",optB:"觉得很多专业都有吸引我的地方，选择起来比较困难"},
+  {dim:"B",text:"你更愿意被描述为？",optA:"「XX 领域的专家」——在某个领域有深入系统的认知",optB:"「知识面很广的人」——能和不同领域的人有效对话"},
+  {dim:"T",text:"你更擅长以下哪种思维活动？",optA:"概念推理和逻辑推导——在头脑中推演和分析",optB:"动手操作和实物制作——在实践过程中摸索和发现"},
+  {dim:"T",text:"学习一个全新的知识时，你的偏好是？",optA:"先把原理和框架完整理解一遍，再接触具体例子和应用",optB:"先上手试几个具体例子，从实践中逐步归纳出原理"},
+  {dim:"T",text:"你对实验室/工作坊（用于动手操作和实践的教学场所）的态度更接近？",optA:"实验室最大的价值是帮助我验证和深化对理论的理解",optB:"实验室最大的价值是让我亲手做出有形的成果或产品"},
+  {dim:"T",text:"面对一个复杂的系统（如一台机器、一套软件架构），你首先会？",optA:"梳理它的逻辑结构和各部分之间的抽象关系",optB:"观察每个组件的实体形态和运作方式"},
+  {dim:"T",text:"完成作业或任务时，你更享受？",optA:"论证一个抽象命题，体验逻辑一步一步推演的乐趣",optB:"解决一个具体问题，体验看到实际成果的满足感"},
+  {dim:"T",text:"你更擅长以下哪种考试或测评形式？",optA:"论述题、分析题、开放性思辨题——需要组织逻辑和表达观点",optB:"应用题、计算题、有明确评分标准的题目——需要给出准确答案"},
+  {dim:"T",text:"对数学、哲学这类高度依赖抽象思维的学科？",optA:"我从内心感到兴趣，享受脱离具体事物进行纯粹思辨的过程",optB:"我可以学习它们，但需要看到它们与现实世界之间的具体连接"},
+  {dim:"T",text:"做决定时，你更依赖什么？",optA:"依据逻辑分析和基本原则进行推导",optB:"依据过往类似情况的实际经验和可验证的效果"},
+  {dim:"T",text:"你怎么看理论课和实验/实践课之间的关系？",optA:"理论课提供了知识骨架，实验课帮助验证和巩固理论",optB:"实验和实践课才是我真正吸收知识的地方，理论起辅助作用"},
+  {dim:"T",text:"面对一个陌生的概念或术语，你的第一反应是？",optA:"查清楚它的精确定义、理论来源和在整个知识体系中的位置",optB:"想了解它能用来解决什么具体问题、在什么场景下有用"},
+  {dim:"T",text:"课余时间，你更享受以下哪种活动？",optA:"参加读书会、辩论赛、深度话题讨论——围绕思想进行交流",optB:"参加手工工作坊、体育运动、动手制作——通过身体和行动参与"},
+  {dim:"T",text:"如果给你一整天的自由时间学习任何内容，你会？",optA:"找一门硬核的理论课程或一部经典著作，投入地沉浸其中",optB:"选定一个一直想做的小项目，从动手开始，在做的过程中学"},
+  {dim:"I",text:"你对大学课程结构的偏好是？",optA:"有明确的必修课体系，按合理的顺序逐层打好基础",optB:"提供大量选修课名额，允许我自由组合和探索不同领域"},
+  {dim:"I",text:"关于学习计划和进度，以下哪种描述更符合你？",optA:"有明确的时间表和阶段性的截止日期会让我更有动力完成",optB:"我倾向于按自己的节奏推进，不喜欢被外部的日程安排框住"},
+  {dim:"I",text:"对于课程评分标准，你的态度是？",optA:"清晰、可预期的评分标准让我安心，我知道朝什么方向努力",optB:"过于细碎的条条框框会让我感到束缚，学习的意义大于分数"},
+  {dim:"I",text:"选课时你的决策方式更接近？",optA:"仔细研究培养方案（大学规定的课程结构、学分要求和毕业标准），规划出最优的选课路径",optB:"重点看课程内容和老师风格是否吸引我，不太纠结于是否最「优化」"},
+  {dim:"I",text:"对于外部规则和制度，你的一般态度是？",optA:"规则提供秩序和可预期性，在大多数情况下应该遵守",optB:"规则是人为制定的，如果它不合理，就应该被质疑和突破"},
+  {dim:"I",text:"以下哪种课堂氛围让你更自在？",optA:"课堂结构清晰、教学目标明确、讨论围绕主题高效推进",optB:"课堂氛围开放、允许自由发散、鼓励不同观点的碰撞"},
+  {dim:"I",text:"面对尚不确定的安排（如未公布的课表、待定的考试时间），你会？",optA:"倾向于尽早确认清楚，把不确定性降到最低",optB:"不确定性是学习过程中的正常部分，我可以边走边适应"},
+  {dim:"I",text:"你对 GPA（平均学分绩点，大学中衡量学业成绩的核心量化指标）的态度是？",optA:"它是衡量我学业表现的重要指标，我会系统性地争取更好的成绩",optB:"它只是一个参考数字，我不会让它主导我学什么以及怎么学"},
+  {dim:"I",text:"当你确立了一个学习目标之后？",optA:"会制定详细、可拆解、有明确时间节点的行动计划",optB:"有个大致方向就开始行动，在过程中根据实际情况灵活调整"},
+  {dim:"I",text:"对于大学的辅导员或学业导师，你的期待是？",optA:"能够给出具体的指导、明确的建议，帮我理清学业和职业路径",optB:"给我足够的自主空间，在我主动求助时能够提供有效的支持"},
+  {dim:"I",text:"在大学里，你的日常节奏更接近以下哪种？",optA:"保持规律的作息和固定的学习时段，生活有明确的节奏感",optB:"根据当天的精力状态和兴趣灵活安排，不喜欢被固定模式束缚"},
+  {dim:"I",text:"以下哪种表述更接近你对「自由」的理解？",optA:"在一个清晰、合理的框架之内，拥有充分的自主选择权",optB:"不做不必要的自我设限，由自己决定自己的边界和方向"},
+];
+
+const TYPE_CONFIG = {
+  "R-D-A-S":{label:"学院派学者",tagline:"学术的殿堂，是你天然的栖息地。",character:{bodyColor:"#5B7FD8",bodyColorLight:"#7B9FEF",skin:"#FFDBB5",hairColor:"#3D2B1F",hairType:"short",accessory:"glasses",expression:"thoughtful"},profile:"你属于学术世界里的「原住民」。你对抽象理论有强烈的亲近感，享受在单一领域持续深挖的满足，倾向于在清晰、严谨的学术框架内推进。你喜欢结构分明的课程体系——先打基础，再攻专题，每一步都有明确的学术阶梯。对你来说，读研读博不是「选项」，而是自然延伸。你最适合学术传统深厚、有一流教授坐镇的研究型大学基础学科方向。",factors:["基础学科实力与学术排名","教授学术水平与导师资源","深造率与保研推免比例","学术社团与讨论文化氛围"],summary:"你天生属于学术的殿堂。去寻找那些把基础学科当作品牌、把学术训练当作核心使命的大学——在那里，你会找到和你一样对知识本身着迷的人。"},
+  "R-D-A-F":{label:"独立思想者",tagline:"用你自己的方式，回答你自己的问题。",character:{bodyColor:"#8B5CF6",bodyColorLight:"#A78BFA",skin:"#FFDAB9",hairColor:"#4A1F6E",hairType:"curly",accessory:"star",expression:"thoughtful",sparkle:true},profile:"你是按照自己的智识罗盘导航的人。你的理论好奇心极强，且往往窄而深——宁可花一学期啃透一个领域，也不愿浮光掠影地扫过十个方向。但你强烈抵触被课表框死：你需要选课的弹性，需要能和教授一对一深度对话的小环境，需要被当作一个独立的思考者来对待。你最适合研究型大学中的精英通识教育项目或荣誉学院。",factors:["个性化培养方案与自主设计专业","导师一对一指导制度","独立研究机会与本科生科研基金","精英通识教育项目或荣誉学院"],summary:"你不需要被安排——你只需要被支持。去找到那些把学生当作独立研究者来培养的大学项目，在那里，你的好奇心和自主性会被当作最大的资本。"},
+  "R-D-C-S":{label:"实验室工程师",tagline:"在实验中寻找世界的秩序。",character:{bodyColor:"#06B6D4",bodyColorLight:"#22D3EE",skin:"#FFDCC3",hairColor:"#1A1A2E",hairType:"spiky",accessory:"beaker",expression:"determined"},profile:"你是一个把理论变成现实的人。你喜欢动手，但不止于动手——你享受「理解原理→设计实验→验证假设→产出成果」的完整回路。你在有清晰结构的实验室环境中如鱼得水，喜欢有形的产出（数据、装置、代码），而非纯纸上推演。你最需要的是理工类强校的硬科学和工程学科——那里有先进的实验设备、强调「做中学」的传统。",factors:["实验设备与科研平台水平","工程/实验类课程占比","本科生进入实验室的机会","行业认证与项目实训体系"],summary:"你的成长发生在实验室的台面上、代码的调试中、装置的组装里。去找那些舍得在实验设备上花钱、把「做中学」写进培养方案的理工强校。"},
+  "R-D-C-F":{label:"探索型科学家",tagline:"好奇心是你的罗盘，实验室是你的游乐场。",character:{bodyColor:"#10B981",bodyColorLight:"#34D399",skin:"#FFDBAC",hairColor:"#7B3F00",hairType:"bob",accessory:"magnifier",expression:"excited"},profile:"你是一个科学世界里的自由探索者。你对用实验手段探索未知有浓厚兴趣，但你不喜欢被标准化的实验手册束缚——你想自己设计实验，自己决定研究方向。你需要的是一个能给你科研自主权、鼓励本科生进实验室、导师愿意放手让你试错的环境。你最适合新型研究型大学或科教融合项目。",factors:["本科生科研自主权与自由度","导师的开放性与试错包容度","前沿科研项目参与机会","新型研究型大学的扁平化结构"],summary:"传统的大课灌输不适合你——你需要在真正的实验室里和真正的科研问题过招。去找那些把本科生当研究者、而不是当学生来对待的新型大学。"},
+  "R-W-A-S":{label:"人文通才",tagline:"在经典中寻找连接世界的线索。",character:{bodyColor:"#F59E0B",bodyColorLight:"#FBBF24",skin:"#FFE0BD",hairColor:"#5C3317",hairType:"long",accessory:"book",expression:"smile"},profile:"你对人文社科的多个领域都有发自内心的兴趣——历史、哲学、文学、社会学，你一样都不想放弃。你喜欢在不同学科之间找联系，享受阅读、讨论和写作的过程。你偏好有体系的通识教育，需要经典阅读和核心课程为你搭建知识框架，而不是一堆零散的选修课。你最适合综合性大学中人文传统深厚、通识教育成熟的环境。",factors:["人文通识课程体系的完整度","经典阅读与讨论课（seminar）传统","人文社科的跨学科项目与研究中心","校园文化的人文气息与学术活动"],summary:"你适合的大学不是规模最大或排名最高的，而是那些仍然相信「经典阅读能改变一个人」的地方。去找有核心课程传统、有讨论课文化的人文强校。"},
+  "R-W-A-F":{label:"自由跨界者",tagline:"知识没有边界，你也不需要。",character:{bodyColor:"#F43F5E",bodyColorLight:"#FB7185",skin:"#FFD9C5",hairColor:"#E85D75",hairType:"twin",accessory:"star",expression:"excited",sparkle:true},profile:"你是最典型的「无法被一个专业定义」的人。你的智识兴趣广泛且不断自我扩展——你对「学科边界」这个概念本身就不太尊重，因为你认为所有真正重要的问题都出现在边界上。你需要极大的课程自由度：跨院系选课、自主设计专业、独立研究项目——这些不是「加分项」，而是你的「基本需求」。",factors:["跨院系选课的自由度与便利性","自主设计专业/个性化培养方案","跨学科研究中心与项目制学习","允许试错和转换方向的弹性学制"],summary:"你不需要一个「专业」——你需要一个让你自由组合知识的平台。去找那些真正允许跨院系选课、甚至有「自主设计专业」制度的大学，那里才是你的主场。"},
+  "R-W-C-S":{label:"应用研究者",tagline:"让知识在真实的土壤里生根。",character:{bodyColor:"#059669",bodyColorLight:"#34D399",skin:"#FFDCC3",hairColor:"#2C1810",hairType:"short",accessory:"leaf",expression:"smile"},profile:"你关心的核心问题是「知识怎么用于解决实际问题」。你对多个领域都有兴趣，但不是纯理论层面的——你想看到知识落地的效果，想在田野、实验室、工程项目中验证想法。你适合有鲜明行业特色的研究型大学（如农林、地矿、海洋、交通），那里既有学术深度，又有强烈的应用导向。",factors:["行业特色学科的实力与声誉","产学研结合的紧密程度","田野调查/工程实践类课程比重","与行业部委或龙头企业的合作关系"],summary:"纯书斋不适合你——你需要一个把科研做在大地上、把论文写在工程里的地方。去找那些行业特色鲜明的「隐形冠军」大学。"},
+  "R-W-C-F":{label:"社会创新者",tagline:"用跨学科的工具，解决真实世界的问题。",character:{bodyColor:"#F97316",bodyColorLight:"#FB923C",skin:"#FFDBB5",hairColor:"#8B4513",hairType:"curly",accessory:"heart",expression:"excited"},profile:"你相信最好的学习发生在解决真实社会问题的过程中。你对社科、设计、工程、商科都可能感兴趣——但不是被学科本身吸引，而是被「怎么用这些工具让世界变得更好」这个更大的问题驱动。你适合那些鼓励社会创新、有跨学科项目制学习、支持学生发起自己的项目的大学。",factors:["社会创新/设计思维类课程与工作坊","学生自主发起项目的资金与制度支持","服务学习（service-learning）的融入程度","社会企业孵化器或公益创新中心"],summary:"你想改变世界——你的大学应该帮你迈出第一步。去找那些把社会创新融入课程体系、鼓励学生「做点什么」而不仅仅是「学点什么」的大学。"},
+  "V-D-A-S":{label:"高精专才",tagline:"精准、深刻、不可替代。",character:{bodyColor:"#3B82F6",bodyColorLight:"#60A5FA",skin:"#FFE4C9",hairColor:"#0F0F1A",hairType:"bob",accessory:"chess",expression:"determined"},profile:"你目标清晰，路径感极强。你选择大学的逻辑不是「我想探索什么」，而是「我想成为什么」。你对抽象分析和专业壁垒有天然的亲近感，愿意在金融、法律、精算、高端翻译等高门槛领域深耕，且你偏好有明确职业通道的培养体系。你最需要的是行业特色强校——财经、政法、外语类院校。",factors:["专业在行业内的认可度与校友网络","职业资格认证与考试的对接程度","清晰的职业发展路径与实习体系","专业排名与行业雇主的定向招聘"],summary:"你不需要「探索」，你需要「成为」。去找那些在特定行业有统治力的特色强校——在那里，你的专业就是你的通行证，校友网络就是你的起跑线。"},
+  "V-D-A-F":{label:"策略分析师",tagline:"在复杂的系统中，找到你的独特视角。",character:{bodyColor:"#6366F1",bodyColorLight:"#818CF8",skin:"#FFDAB9",hairColor:"#1A1A3E",hairType:"short",accessory:"glasses",expression:"thoughtful"},profile:"你既有深入分析复杂问题的能力，又需要一定的自由度来发展自己的独特判断。你适合财经、管理、新闻传播类强校，但最好是那些提供弹性学制、鼓励跨领域选修的项目——你需要的不只是「标准答案」，而是发展自己分析框架的空间。你会在案例拆解、策略推演和数据分析类课程中大放异彩。",factors:["案例教学与实战分析类课程比重","跨领域选修与双学位的便利性","校友职业路径的多样性与质量","数据分析与策略研究类资源"],summary:"你的价值在于独特的判断力。去找那些不只教标准答案、而是培养你建立自己分析框架的大学和专业项目。"},
+  "V-D-C-S":{label:"硬核工程师",tagline:"不满足于想——你要把它造出来。",character:{bodyColor:"#64748B",bodyColorLight:"#94A3B8",skin:"#FFDCC3",hairColor:"#2D2D2D",hairType:"spiky",accessory:"gear",expression:"determined"},profile:"你是一个建造者。你最大的驱动力是把东西实实在在地做出来——代码、电路、结构、系统。你适合应用型工科强校，那些有系统化训练、行业认证、实习体系完善的地方。你需要在有结构的环境中通过「做」来学，而不是通过「读」来学。国防军工、航空航天、硬科技、高端制造——这些技术门槛高、路径清晰的领域天然吸引你。",factors:["工程实训条件与项目制教学比重","行业认证体系与职业资格对接","企业合作项目与实习基地质量","专业技术社团与学科竞赛传统"],summary:"你需要一个能让你动手建造的地方——设备齐全的车间、有项目的导师、看得见的技术成长阶梯。去找那些以「工程师文化」为荣的工科强校。"},
+  "V-D-C-F":{label:"创业实践者",tagline:"不要告诉我不可能——我要试试看。",character:{bodyColor:"#EF4444",bodyColorLight:"#F87171",skin:"#FFDBAC",hairColor:"#6B2020",hairType:"curly",accessory:"rocket",expression:"excited"},profile:"你是一个实干家——最大的驱动力是「把想法变成产品/项目/组织」。学术理论对你来说只有工具价值，你更关心「这东西能不能跑起来」。你适合创业氛围浓厚、产教融合紧密的大学——那里有孵化器、有创业基金、有灵活的学制允许你 gap 一年去试项目。传统「上课-考试-毕业」的路径对你来说太慢了。",factors:["创业孵化器与种子基金的可及性","弹性学制与休学创业的政策支持","产教融合与企业导师资源","创业类竞赛与路演活动的活跃度"],summary:"你的大学应该是一个 launchpad，不是一条流水线。去找那些有创业基因、鼓励学生「先做起来」的大学——那里会给你跑道，而不仅仅是课表。"},
+  "V-W-A-S":{label:"文化传播者",tagline:"用语言和思想去影响世界。",character:{bodyColor:"#EAB308",bodyColorLight:"#FACC15",skin:"#FFE0BD",hairColor:"#C4A44A",hairType:"bob",accessory:"megaphone",expression:"smile"},profile:"你的核心驱动力是沟通和影响——你想理解人、影响人、帮助人。你对教育、语言、传媒、文化等领域有广泛的兴趣，且偏好有体系的训练（如教师资格证、翻译认证、新闻从业标准）。你最适合师范、语言、传媒类强校——这些地方既有深厚的文化底蕴，又有清晰的职业出口。",factors:["专业认证体系与行业准入对接","实践教学（教学实习/媒体报道等）比重","人文通识教育的广度与深度","校友在文化教育传媒行业的分布"],summary:"你想影响人——你需要一所大学，既给你深厚的文化底蕴，也给你清晰的职业路径。去找那些在师范、语言、传媒领域有不可撼动地位的特色强校。"},
+  "V-W-A-F":{label:"跨界沟通者",tagline:"在不同文化和领域之间搭建桥梁。",character:{bodyColor:"#14B8A6",bodyColorLight:"#2DD4BF",skin:"#FFD9C5",hairColor:"#1A5C5C",hairType:"curly",accessory:"globe",expression:"excited"},profile:"你享受在不同文化、不同领域之间做翻译和连接的工作。国际关系、外交、跨文化传播、国际商务是你的天然领域。你既需要有国际视野的学术训练，又需要足够的自由度来塑造自己独特的知识组合——纯「标准化培养」让你感到窒息。你最适合国际化程度高、有丰富海外交流项目的大学。",factors:["国际化程度与海外交流项目数量","多语种教学资源与跨文化课程","国际组织/跨国企业的实习机会","校园的国际文化多样性与包容度"],summary:"你的视野跨越国界——你的大学也应该如此。去找那些真正国际化的大学，在那里，不同文化背景的人在一起学习本身就是最好的教育。"},
+  "V-W-C-S":{label:"临床实干家",tagline:"用双手和知识，直接守护生命。",character:{bodyColor:"#DC2626",bodyColorLight:"#F87171",skin:"#FFDBB5",hairColor:"#1C1C1C",hairType:"short",accessory:"stethoscope",expression:"determined"},profile:"你的核心驱动力是直接帮助具体的人。医药、护理、康复、临床心理——这些领域要求你把广泛的知识（生物、化学、心理、伦理）整合成具体的临床判断，并在高度规范化的系统内精确操作。你最适合医科类大学或综合大学的医学部——那里有系统的临床训练体系、明确的职业阶梯，以及「生命至上」的专业文化。",factors:["附属医院/临床教学基地的数量与质量","临床实践训练的占比与规范性","执业资格考试通过率与行业认可度","医学人文与伦理教育的融入程度"],summary:"你选择的不是一份职业，而是一种以他人生命为重的召唤。去找那些有强大附属医院体系、把临床训练视为核心使命的医科院校。"},
+  "V-W-C-F":{label:"艺体创作者",tagline:"创造，是你不可妥协的本能。",character:{bodyColor:"#D946EF",bodyColorLight:"#E879F9",skin:"#FFDAB9",hairColor:"#C026D3",hairType:"long",accessory:"palette",expression:"excited",sparkle:true},profile:"你通过创造来表达自己——无论是视觉艺术、表演、设计还是体育。你对多个领域保持开放，但核心是通过身体和感官与世界互动，产出可感知的作品或表现。你最适合艺术、设计、体育类院校——那里有工作室文化、师徒制、展演机制，和传统大学的「听课-考试」完全是两套逻辑。",factors:["工作室/排练厅/训练场馆的条件","师徒制与一对一指导的传统","展演/比赛/发布的机会与平台","创作自由度与跨媒介实验的空间"],summary:"你的大学不是一个「学知识的地方」，而是你创作和成长的场域。去找那些有工作室文化、有师徒传承、有展演舞台的艺术或体育院校——在那里，创作不是课外活动，而是核心使命。"}
+};
+
+const dimMeta = {
+  U:{name:"使命取向",chipA:"R",chipB:"V",labelA:"学术探究",labelB:"职业应用",descA:"你的核心驱动力来自对学科本身的好奇。你上大学是为了深入理解知识的本质，建立一套看世界的思维框架。读研读博对你来说是自然延伸，而非外界施加的要求。",descB:"你的核心驱动力来自对职业目标的追求。你上大学是为了获得有竞争力的职业能力，找到清晰的职业方向。你更看重知识能解决什么实际问题，而非停留在理论层面。"},
+  B:{name:"学科边界",chipA:"D",chipB:"W",labelA:"纵深专精",labelB:"跨界广博",descA:"你的知识偏好是不断加深而非不断扩展。你享受在一个领域里越挖越深的过程，相信真正的竞争力来自不可替代的深度。专注一个方向做到极致，让你感到踏实和充实。",descB:"你的知识偏好是广泛连接而非单点深钻。你对多个领域保持开放和好奇，相信最有价值的东西往往出现在学科交叉处。跨领域思考对你来说不是分心，而是养分。"},
+  T:{name:"认知风格",chipA:"A",chipB:"C",labelA:"抽象思辨",labelB:"具象实操",descA:"你处理知识的方式偏向概念推理和逻辑推演。你享受在头脑中构建理论框架，喜欢追问「为什么」。论述、分析、思辨——这些是你的舒适区，也是你最能发挥所长的地方。",descB:"你处理知识的方式偏向动手操作和实践验证。你不满足于「知道」，必须「做到」才算真正理解。实验、制作、项目实践——这些是你最有效的学习路径。"},
+  I:{name:"制度偏好",chipA:"S",chipB:"F",labelA:"有序规划",labelB:"自由探索",descA:"你对大学环境的需求偏向清晰的结构和明确的路径。有体系的课程、明确的评价标准、可预期的进度——这些让你安心，也让你高效。你在有序的框架内最能发挥自己的潜力。",descB:"你对大学环境的需求偏向弹性和自主空间。你需要选课的自由、探索的余地、不被过度规划的权利。在开放的环境中，你最能找到自己的节奏和方向。"},
+};
+
+function shuffleArr(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
+
+// ── 首页 Vue 组件 v2 ──
+export const HomePage = {
+  template: `
+  <div>
+    <!-- ===== Hero v2：粒子背景 + 打字机 ===== -->
+    <section class="hero">
+      <canvas id="hero-canvas" class="hero-canvas"></canvas>
+      <!-- 浮动装饰 -->
+      <div class="hero-float">✨</div>
+      <div class="hero-float">💡</div>
+      <div class="hero-float">🚀</div>
+      <div class="hero-float">🎯</div>
+      <div class="hero-float">🌟</div>
+      <div class="hero-float">💭</div>
+
+      <div class="hero-content">
+        <div class="hero-avatar">🐻</div>
+        <div class="hero-greeting">Hello, I'm</div>
+        <h1 class="hero-name">小熊</h1>
+        <div class="hero-tagline-wrap">
+          <span class="hero-tagline" id="hero-typewriter"
+            data-texts='["用好奇心建造，用代码创造","让复杂的事情变得简单","帮助人们做出更好的选择","相信好的产品是长出来的"]'>
+          </span>
+          <span class="hero-cursor"></span>
+        </div>
+        <div class="hero-tags">
+          <span class="tag tag-purple">全栈开发</span>
+          <span class="tag tag-outline">产品设计</span>
+          <span class="tag tag-outline">教育科技</span>
+        </div>
+        <div class="hero-actions">
+          <a href="#/about" class="btn btn-primary">了解更多</a>
+          <a href="#/projects" class="btn btn-outline">查看项目</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== UBTI 测试区 ===== -->
+    <section class="section reveal reveal-up" id="ubti-area">
+      <div class="container">
+        <div v-if="quizScreen==='intro'" class="ubti-section">
+          <div class="ubti-logo">UBTI</div>
+          <div class="ubti-subtitle">University Best-fit Type Indicator</div>
+          <div class="ubti-divider"></div>
+          <p class="ubti-lead">大学不在排名，在于和你<span class="hl">同频</span></p>
+          <div class="ubti-dim-grid">
+            <div class="ubti-dim-item"><div class="ubti-dim-icon">🎯</div><div class="ubti-dim-name">使命取向</div><div class="ubti-dim-range">学术探究 ↔ 职业应用</div></div>
+            <div class="ubti-dim-item"><div class="ubti-dim-icon">📐</div><div class="ubti-dim-name">学科边界</div><div class="ubti-dim-range">纵深专精 ↔ 跨界广博</div></div>
+            <div class="ubti-dim-item"><div class="ubti-dim-icon">🧠</div><div class="ubti-dim-name">认知风格</div><div class="ubti-dim-range">抽象思辨 ↔ 具象实操</div></div>
+            <div class="ubti-dim-item"><div class="ubti-dim-icon">🏛</div><div class="ubti-dim-name">制度偏好</div><div class="ubti-dim-range">有序规划 ↔ 自由探索</div></div>
+          </div>
+          <div class="ubti-steps">
+            <div class="ubti-step"><span class="ubti-step-num">1</span>回答 48 道选择题</div>
+            <div class="ubti-step-arrow">→</div>
+            <div class="ubti-step"><span class="ubti-step-num">2</span>四个维度分析</div>
+            <div class="ubti-step-arrow">→</div>
+            <div class="ubti-step"><span class="ubti-step-num">3</span>匹配你的大学类型</div>
+          </div>
+          <div class="ubti-meta"><span>📋 48 题</span><span>⏱ 约 8 分钟</span><span>🔒 数据留在本地</span></div>
+          <button class="ubti-btn-start" @click="startQuiz">开 始 测 试</button>
+        </div>
+
+        <div v-if="quizScreen==='quiz'" class="ubti-quiz-wrap">
+          <div class="ubti-progress-wrap">
+            <div class="ubti-progress-bar"><div class="ubti-progress-fill" :style="{width: progressPct+'%'}"></div></div>
+            <div class="ubti-progress-text"><span>第 {{ currentQ + 1 }} / {{ shuffled.length }} 题</span></div>
+          </div>
+          <div class="ubti-q-card" v-if="currentQuestion">
+            <div class="ubti-dim-chip">{{ dimMeta[currentQuestion.dim].name }}</div>
+            <div class="ubti-q-text">{{ currentQuestion.text }}</div>
+            <div class="ubti-scale-wrap">
+              <div class="ubti-scale-labels"><span>{{ leftLabel }}</span><span>{{ rightLabel }}</span></div>
+              <div class="ubti-scale-spectrum">
+                <button class="ubti-scale-btn" :class="{sel:choices[currentQ]===0}" @click="answer(0)"><span class="ubti-scale-dot"></span><span class="ubti-scale-slabel">非常认同左侧</span></button>
+                <button class="ubti-scale-btn" :class="{sel:choices[currentQ]===1}" @click="answer(1)"><span class="ubti-scale-dot"></span><span class="ubti-scale-slabel">比较认同左侧</span></button>
+                <button class="ubti-scale-btn" :class="{sel:choices[currentQ]===2}" @click="answer(2)"><span class="ubti-scale-dot"></span><span class="ubti-scale-slabel">中立</span></button>
+                <button class="ubti-scale-btn" :class="{sel:choices[currentQ]===3}" @click="answer(3)"><span class="ubti-scale-dot"></span><span class="ubti-scale-slabel">比较认同右侧</span></button>
+                <button class="ubti-scale-btn" :class="{sel:choices[currentQ]===4}" @click="answer(4)"><span class="ubti-scale-dot"></span><span class="ubti-scale-slabel">非常认同右侧</span></button>
+              </div>
+            </div>
+            <div class="ubti-back-row">
+              <button class="ubti-btn-back" :disabled="currentQ===0" @click="goBack">← 上一题</button>
+              <button class="ubti-btn-skip" @click="skipQ">跳过 ⏭</button>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="quizScreen==='results' && resultType" class="ubti-results-wrap">
+          <div class="ubti-results-hero">
+            <div class="character-wrap" v-html="resultSvg"></div>
+            <div class="ubti-type-code">{{ resultCode }}</div>
+            <div class="ubti-type-label">{{ resultType.label }}</div>
+            <div class="ubti-type-tagline">{{ resultType.tagline }}</div>
+          </div>
+          <div class="ubti-results-card">
+            <h3>📖 适配画像</h3>
+            <div class="ubti-profile-text">{{ resultType.profile }}</div>
+            <div class="ubti-summary-banner"><p>✨ {{ resultType.summary }}</p></div>
+          </div>
+          <div class="ubti-results-card">
+            <h3>🎯 择校时最该关注的</h3>
+            <div class="ubti-key-factors">
+              <div v-for="(f,i) in resultType.factors" :key="i" class="ubti-key-factor"><span class="kf-emoji">{{ ['🔬','📚','🏛','🤝'][i] }}</span>{{ f }}</div>
+            </div>
+          </div>
+          <div class="ubti-results-card">
+            <h3>📊 维度倾向</h3>
+            <div v-for="dim in dimOrder" :key="dim" class="ubti-dim-row">
+              <div class="ubti-dim-label l">{{ dimMeta[dim].labelA }}</div>
+              <div class="ubti-dim-bar-wrap">
+                <div class="ubti-dim-bar-l" :style="{width: dimData[dim].pA+'%'}">{{ dimData[dim].pA >= 18 ? dimData[dim].a : '' }}</div>
+                <div class="ubti-dim-bar-r" :style="{width: dimData[dim].pB+'%'}">{{ dimData[dim].pB >= 18 ? dimData[dim].b : '' }}</div>
+              </div>
+              <div class="ubti-dim-label r">{{ dimMeta[dim].labelB }}</div>
+              <div class="ubti-dim-verdict">{{ dimData[dim].verdict }}</div>
+            </div>
+          </div>
+          <div class="ubti-results-card">
+            <h3>🔑 四个字母的含义</h3>
+            <div v-for="(dim,i) in dimOrder" :key="dim" class="ubti-legend-item">
+              <strong>{{ dimMeta[dim].name }} → {{ resultParts[i] }} · {{ resultParts[i]===dimMeta[dim].chipA ? dimMeta[dim].labelA : dimMeta[dim].labelB }}</strong><br>
+              {{ resultParts[i]===dimMeta[dim].chipA ? dimMeta[dim].descA : dimMeta[dim].descB }}
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:20px">
+            <button class="btn btn-outline" @click="retakeTest">🔄 重新测试</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 快速导航 ===== -->
+    <section class="section reveal reveal-up">
+      <div class="container">
+        <h2 class="section-title">探索更多</h2>
+        <p class="section-subtitle">这里还有一些你可能感兴趣的内容</p>
+        <div class="nav-grid">
+          <a href="#/about" class="card reveal reveal-up reveal-d2"><div class="nav-grid-icon">👤</div><div class="nav-grid-title">关于我</div><div class="nav-grid-desc">了解我的背景、技能和做事方式</div></a>
+          <a href="#/projects" class="card reveal reveal-up reveal-d3"><div class="nav-grid-icon">💼</div><div class="nav-grid-title">项目作品</div><div class="nav-grid-desc">看看我做过的东西和技术栈</div></a>
+          <a href="#/blog" class="card reveal reveal-up reveal-d4"><div class="nav-grid-icon">✍️</div><div class="nav-grid-title">博客</div><div class="nav-grid-desc">阅读我的技术文章和思考随笔</div></a>
+          <a href="#/products" class="card reveal reveal-up reveal-d5"><div class="nav-grid-icon">🚀</div><div class="nav-grid-title">已上线产品</div><div class="nav-grid-desc">那些真正在运行的产品和服务</div></a>
+        </div>
+      </div>
+    </section>
+  </div>
+  `,
+  data() {
+    return {
+      quizScreen: 'intro',
+      currentQ: 0,
+      shuffled: [],
+      choices: [],
+      dimMeta,
+      dimOrder: ['U','B','T','I']
+    }
+  },
+  computed: {
+    progressPct() { return Math.round((this.currentQ / this.shuffled.length) * 100); },
+    currentQuestion() { return this.shuffled[this.currentQ] || null; },
+    leftLabel() { const q = this.currentQuestion; return q ? (q.flipped ? q.optB : q.optA) : ''; },
+    rightLabel() { const q = this.currentQuestion; return q ? (q.flipped ? q.optA : q.optB) : ''; },
+    resultCode() { return this.quizScreen === 'results' ? this.calcCode(this.calcScores()) : ''; },
+    resultType() { return TYPE_CONFIG[this.resultCode] || null; },
+    resultSvg() { return this.resultType ? makeCharacter(this.resultType.character) : ''; },
+    resultParts() { return this.resultCode.split('-'); },
+    dimData() {
+      const scores = this.calcScores(); const data = {};
+      this.dimOrder.forEach(dim => {
+        const a = scores[dim].A, b = scores[dim].B, tot = a + b;
+        const pA = tot ? Math.round(a/tot*100) : 50, pB = 100 - pA;
+        const dm = dimMeta[dim];
+        data[dim] = { a, b, pA, pB, verdict: pA >= 55 ? '偏 ' + dm.labelA : (pB >= 55 ? '偏 ' + dm.labelB : '倾向平衡') };
+      });
+      return data;
+    }
+  },
+  methods: {
+    startQuiz() {
+      this.currentQ = 0;
+      this.shuffled = shuffleArr(QUESTIONS).map(q => ({...q, flipped: Math.random() > .5}));
+      this.choices = new Array(this.shuffled.length).fill(null);
+      this.quizScreen = 'quiz';
+      window.scrollTo({top: document.getElementById('ubti-area')?.offsetTop - 80 || 0, behavior: 'smooth'});
+    },
+    answer(choice) {
+      this.choices[this.currentQ] = choice; this.currentQ++;
+      if (this.currentQ >= this.shuffled.length) { this.quizScreen = 'results'; window.scrollTo({top: 0, behavior: 'smooth'}); }
+    },
+    goBack() { if (this.currentQ > 0) this.currentQ--; },
+    skipQ() {
+      if (this.choices[this.currentQ] === null) this.choices[this.currentQ] = 2;
+      this.currentQ++;
+      if (this.currentQ >= this.shuffled.length) { this.quizScreen = 'results'; window.scrollTo({top: 0, behavior: 'smooth'}); }
+    },
+    retakeTest() { this.quizScreen = 'intro'; window.scrollTo({top: document.getElementById('ubti-area')?.offsetTop - 80 || 0, behavior: 'smooth'}); },
+    calcScores() {
+      const s = {U:{A:0,B:0},B:{A:0,B:0},T:{A:0,B:0},I:{A:0,B:0}};
+      for (let i = 0; i < this.shuffled.length; i++) {
+        const c = this.choices[i]; if (c === null || c === undefined) continue;
+        const q = this.shuffled[i], dim = q.dim;
+        const toA = q.flipped ? "B" : "A", toB = q.flipped ? "A" : "B";
+        if (c === 0) s[dim][toA] += 2; else if (c === 1) s[dim][toA] += 1;
+        else if (c === 3) s[dim][toB] += 1; else if (c === 4) s[dim][toB] += 2;
+      }
+      return s;
+    },
+    calcCode(scores) {
+      return (scores.U.A >= scores.U.B ? "R" : "V") + "-" + (scores.B.A >= scores.B.B ? "D" : "W") + "-" + (scores.T.A >= scores.T.B ? "A" : "C") + "-" + (scores.I.A >= scores.I.B ? "S" : "F");
+    }
+  }
+};

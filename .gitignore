@@ -1,0 +1,4 @@
+scan*.ps1
+scan_result.txt
+~
+start-server.bat
